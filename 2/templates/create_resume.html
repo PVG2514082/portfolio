@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <title>Мое резюме</title>
+</head>
+<body>
+ <h1>Мое резюме</h1>
+
+ <form method="GET" action="search.php">
+  <label for="name">Имя:</label>
+        <input type="text" id="name" name="name" required>
+        <br>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        <br>
+  <label for="resumee">Пару слов о себе:</label>
+  <textarea id="resumee" name="resumee" required></textarea>
+
+  <br>
+  <label>Местоположение:</label>
+  <input type="text" name="location">
+  <br>
+  <label>Опыт работы:</label>
+  <select name="experience">
+   <option value="">Любой</option>
+   <option value="1">1 год и меньше</option>
+   <option value="2">От 1 до 3 лет</option>
+   <option value="3">От 3 до 5 лет</option>
+   <option value="4">Более 5 лет</option>
+  </select>
+  <br>
+  <label>Зарплата:</label>
+  <select name="salary">
+   <option value="">Любая</option>
+   <option value="1">До 50 000 рублей</option>
+   <option value="2">От 50 000 до 100 000 рублей</option>
+   <option value="3">Более 100 000 рублей</option>
+  </select>
+  <br>
+  <input type="submit" value="создать">
+ </form>
+</body>
+</html>

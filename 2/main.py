@@ -8,7 +8,7 @@ def index():
 @app.route('/search', methods=['GET'])
 def search():
     search_term = request.args.get('search')
-    # Perform search functionality here
+
     return render_template('search_results.html', search_term=search_term)
 
 @app.route('/resume', methods=['GET', 'POST'])
