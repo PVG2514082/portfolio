@@ -32,8 +32,8 @@ def form_authorization():
 
         db_lp = sqlite3.connect('login_password.db')
         cursor_db = db_lp.cursor()
-        cursor_db.execute(('''SELECT password FROM login_passwords.db
-                                                   WHERE login = '{}';
+        cursor_db.execute(('''SELECT Password FROM login_password.db
+                                                   WHERE Login = '{}';
                                                    ''').format(Login))
         pas = cursor_db.fetchall()
 
@@ -48,6 +48,28 @@ def form_authorization():
         return render_template('successfulauth.html')
 
     return render_template('authorization.html')
+
+@app.route('/registration', methods=['GET', 'POST'])
+def form_registration():
+    if request.method == 'POST':
+        Login = request.form.get('Login')
+        Password = request.form.get('Password')
+
+        db_lp = sqlite3.connect('login_password.db')
+        cursor_db = db_lp.cursor()
+        sql_insert = '''INSERT INTO login_password.db VALUES('{}','{}');'''.format(Login, Password)
+
+        cursor_db.execute(sql_insert)
+
+        cursor_db.close()
+
+        db_lp.commit()
+        db_lp.close()
+
+        return render_template('successfulregis.html')
+
+    return render_template('registration.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
