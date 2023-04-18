@@ -3,14 +3,17 @@ import sqlite3
 
 app = Flask(__name__)
 
+
 @app.route('/')
 def index():
     return render_template('123.html')
+
 
 @app.route('/search', methods=['GET'])
 def search():
     search_term = request.args.get('search')
     return render_template('search_results.html', search_term=search_term)
+
 
 @app.route('/resume', methods=['GET', 'POST'])
 def create_resume():
@@ -24,17 +27,16 @@ def create_resume():
     else:
         return render_template('create_resume.html')
 
+
 @app.route('/authorization', methods=['GET', 'POST'])
 def form_authorization():
     if request.method == 'POST':
         Login = request.form.get('Login')
         Password = request.form.get('Password')
 
-        db_lp = sqlite3.connect('login_password.db')
+        db_lp = sqlite3.connect('wer.sqlite')
         cursor_db = db_lp.cursor()
-        cursor_db.execute(('''SELECT Password FROM login_password.db
-                                                   WHERE Login = '{}';
-                                                   ''').format(Login))
+        cursor_db.execute('SELECT * FROM aut WHERE Login = ?', (Login,))
         pas = cursor_db.fetchall()
 
         cursor_db.close()
@@ -49,24 +51,24 @@ def form_authorization():
 
     return render_template('authorization.html')
 
+
 @app.route('/registration', methods=['GET', 'POST'])
 def form_registration():
     if request.method == 'POST':
         Login = request.form.get('Login')
         Password = request.form.get('Password')
 
-        db_lp = sqlite3.connect('login_password.db')
+        db_lp = sqlite3.connect('wer.sqlite')
         cursor_db = db_lp.cursor()
-        sql_insert = '''INSERT INTO login_password.db VALUES('{}','{}');'''.format(Login, Password)
-
-        cursor_db.execute(sql_insert)
+        a = len(db_lp.cursor().execute("SELECT * FROM aut").fetchall())
+        s = db_lp.cursor().execute("""INSERT INTO aut VALUES (?, ?, ?)""", (a + 1, Login, Password,)).fetchall()
 
         cursor_db.close()
 
         db_lp.commit()
         db_lp.close()
 
-        return render_template('successfulregis.html')
+        return render_template('successregis.html')
 
     return render_template('registration.html')
 
