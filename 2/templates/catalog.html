@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Resume Listing</title>
+  </head>
+  <body>
+    <h1>Resume Listing</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Loop through resume data from SQLite and display values -->
+        {% for res in resume_data %}
+          <tr>
+            <td>{{ res.id }}</td>
+            <td>{{ res.name }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </body>
+</html>

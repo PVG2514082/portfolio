@@ -3,6 +3,11 @@ import sqlite3
 
 app = Flask(__name__)
 
+def get_db_connection():
+    abc = sqlite3.connect('resume.sqlite')
+    abc.row_factory = sqlite3.Row
+    return abc
+
 
 @app.route('/')
 def index():
@@ -20,12 +25,24 @@ def create_resume():
     if request.method == 'POST':
         name = request.form.get('name')
         email = request.form.get('email')
-        phone = request.form.get('phone')
-        resume = request.form.get('resume')
-        # Create resume functionality here
-        return render_template('resume_confirmation.html', name=name)
-    else:
-        return render_template('create_resume.html')
+        salary = request.form.get('salary')
+        experience = request.form.get('experience')
+        place = request.form.get('location')
+        resume = request.form.get('resumee')
+        db_lp = sqlite3.connect('resume.sqlite')
+        cursor_db = db_lp.cursor()
+        print(experience, salary)
+        a = len(db_lp.cursor().execute("SELECT * FROM res").fetchall())
+
+        s = db_lp.cursor().execute("""INSERT INTO res VALUES (?, ?, ?, ?, ?, ?, ?)""", (a, name, email, resume, place, experience, salary)).fetchall()
+
+        cursor_db.close()
+
+        db_lp.commit()
+        db_lp.close()
+
+        return render_template('123.html')
+    return render_template('create_resume.html')
 
 
 @app.route('/authorization', methods=['GET', 'POST'])
@@ -36,7 +53,7 @@ def form_authorization():
 
         db_lp = sqlite3.connect('wer.sqlite')
         cursor_db = db_lp.cursor()
-        cursor_db.execute('SELECT * FROM aut WHERE Login = ?', (Login,))
+        cursor_db.execute('SELECT password FROM aut WHERE login = ?', (Login,))
         pas = cursor_db.fetchall()
 
         cursor_db.close()
@@ -47,7 +64,7 @@ def form_authorization():
             return render_template('auth_bad.html')
 
         db_lp.close()
-        return render_template('successfulauth.html')
+        return render_template('aut.html')
 
     return render_template('authorization.html')
 
@@ -71,6 +88,15 @@ def form_registration():
         return render_template('successregis.html')
 
     return render_template('registration.html')
+
+@app.route('/catalog')
+def resume_list():
+    conn = sqlite3.connect('resume.sqlite')
+    cursor = conn.cursor()
+    cursor.execute('SELECT id, name FROM res')
+    resume_data = cursor.fetchall()
+    conn.close()
+    return render_template('catalog.html', resume_data=resume_data)
 
 
 if __name__ == '__main__':
